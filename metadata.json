@@ -1,0 +1,6 @@
+{
+  "name": "Minecraft Sunday Scheduler",
+  "description": "Планировщик игровых сессий в Minecraft по воскресеньям для сквада друзей с автоматическим поиском оптимального пересечения свободного времени.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

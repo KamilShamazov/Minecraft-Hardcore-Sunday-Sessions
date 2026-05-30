@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "Lobby": {
+      "title": "Lobby",
+      "description": "Information about a shared Minecraft planning lobby",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique lobby code"
+        },
+        "title": {
+          "type": "string",
+          "description": "Lobby display title"
+        },
+        "targetDuration": {
+          "type": "number",
+          "description": "Continuous session duration filter"
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Lobby standard timestamp"
+        },
+        "players": {
+          "type": "object",
+          "description": "Map of player profile objects keyed by id"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "targetDuration",
+        "createdAt",
+        "players"
+      ]
+    }
+  },
+  "firestore": {
+    "/lobbies/{lobbyId}": {
+      "schema": "Lobby",
+      "description": "Store individual lobbies with real-time synchronized players schema"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Shared Helper functions
+    function isValidId(id) {
+       return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Lobby schema validator helper
+    function isValidLobby(data) {
+      return data.keys().hasAll(['id', 'title', 'targetDuration', 'createdAt', 'players'])
+        && data.keys().size() == 5
+        && data.id is string && data.id.size() >= 3 && data.id.size() <= 64
+        && data.title is string && data.title.size() >= 2 && data.title.size() <= 64
+        && data.targetDuration is number && data.targetDuration >= 1.0 && data.targetDuration <= 24.0
+        && data.createdAt is number
+        && data.players is map;
+    }
+
+    // Match rules for Lobbies
+    match /lobbies/{lobbyId} {
+      allow get: if isValidId(lobbyId);
+      
+      allow create: if isValidId(lobbyId) && isValidLobby(incoming());
+      
+      allow update: if isValidId(lobbyId) && isValidLobby(incoming());
+    }
+  }
+}
